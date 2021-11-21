@@ -19,8 +19,6 @@ class UsersController extends Controller
 
     public function index(Request $request)
     {
-        $this->can('view');
-
         $users = User::with('roles')
             ->get();
 
@@ -29,8 +27,6 @@ class UsersController extends Controller
 
     public function item($user)
     {
-        $this->can('view');
-
         $item = User::where('id', $user)->first();
 
         return new UserResource($item);
@@ -38,8 +34,6 @@ class UsersController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $this->can('view');
-
         $userManager = app(UserManager::class, ['user' => $user]);
         $user = $userManager->update($request->all());
 
@@ -48,16 +42,12 @@ class UsersController extends Controller
 
     public function delete(User $user)
     {
-        $this->can('view');
-
         app(UserManager::class, ['user' => $user])->delete();
         return $this->noContentResponse();
     }
 
     public function users(Request $request)
     {
-        $this->can('view');
-
         $users = User::whereHas('roles', function($q){
             $q->where('name', Role::USER_ROLE);})
             ->get();

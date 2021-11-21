@@ -46,6 +46,7 @@ class UsersController extends Controller
     {
         $booking = Booking::where('id', $booking)->first();
         $booking->available = 0;
+        $booking->save();
 
         $now = Carbon::now()->toDateString();
         $id=Auth::user()->id;

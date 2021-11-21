@@ -21,7 +21,7 @@ class BookingResource extends JsonResource
             'summ' => $this->resource->summ,
             'available' => $this->resource->available,
             'start' => $this->resource->start->format('d-m-Y'),
-            'end' => $this->resource->start->format('d-m-Y'),
+            'end' => $this->resource->end->format('d-m-Y'),
         ];
     }
 }

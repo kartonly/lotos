@@ -13,21 +13,18 @@ class ServicesController extends Controller
 
     public function index()
     {
-        $this->can('view');
         $services = Service::all();
 
         return $services;
     }
 
     public function item($service){
-        $this->can('view');
         $item = Service::where('id', $service)->get();
 
         return $item;
     }
 
     public function disabled($service){
-        $this->can('update');
         $item = Service::where('id', $service)->get();
         $item->avialable = 0;
 
@@ -36,7 +33,6 @@ class ServicesController extends Controller
 
     public function delete($service)
     {
-        $this->can('delete');
         $item = Service::where('id', $service)->delete();
 
         return new Response([]);

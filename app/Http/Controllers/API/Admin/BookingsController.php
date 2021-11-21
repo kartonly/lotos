@@ -14,26 +14,28 @@ class BookingsController extends Controller
 
     public function index()
     {
-        $this->can('view');
+
         $bookings = Booking::all();
 
         return $bookings;
     }
 
     public function item($booking){
-        $this->can('view');
+
         $item = Booking::where('id', $booking)->get();
 
         return $item;
     }
 
     public function disabled($booking){
-        $this->can('update');
+
         $item = Booking::where('id', $booking)->get();
         if ($item->avialable == 0){
             $item->avialable = 1;
+            $item->save();
         } else {
             $item->avialable = 0;
+            $item->save();
         }
 
 
@@ -42,7 +44,7 @@ class BookingsController extends Controller
 
     public function delete($booking)
     {
-        $this->can('delete');
+        ;
         $item = Booking::where('id', $booking)->delete();
 
         return new Response([]);

@@ -96,7 +96,6 @@ class RoomsController extends Controller
         $count = $count*$dif;
 
         $allServices = Service::all();
-
         $serSum = 0;
         foreach ($allServices as $allService){
             foreach ($reqServices as $reqService){

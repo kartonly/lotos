@@ -6,10 +6,13 @@ namespace App\Http\Controllers\API\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RoomResource;
+use App\Models\Role;
 use App\Models\Room;
+use App\Models\User;
 use App\RoomManager;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Auth;
 
 class RoomsController extends Controller
 {
@@ -17,15 +20,12 @@ class RoomsController extends Controller
 
     public function index(Request $request)
     {
-        $this->can('view');
-
         $rooms = Room::all();
 
         return RoomResource::collection($rooms)->toArray($request);
     }
 
     public function item($room){
-        $this->can('view');
 
         $item = Room::where('id', $room)->get();
 
@@ -33,13 +33,14 @@ class RoomsController extends Controller
     }
 
     public function disabled($room){
-        $this->can('update');
 
         $item = Room::where('id', $room)->get();
         if ($item->avialable == 0){
             $item->avialable = 1;
+            $item->save();
         } else {
             $item->avialable = 0;
+            $item->save();
         }
 
         return new RoomResource($item);
@@ -47,7 +48,6 @@ class RoomsController extends Controller
 
     public function delete(Room $room)
     {
-        $this->can('delete');
 
         app(RoomManager::class, ['room' => $room])->delete();
 
