@@ -62,14 +62,25 @@ class RoomsController extends Controller
 
         $start = Carbon::parse($request['start']);
         $end = Carbon::parse($request['end']);
+        $now = Carbon::now();
         $dif = $end->diffInDays($start);
 
         $count = $count*$dif;
 
-        $bookingManager = app(BookingManager::class);
-        $bookingManager->create($request->all(), $customer, $room, $count, $reqServices);
+        $rooms = Room::whereHas('booking', function($q) use ($start, $end){
+            $q->where('start','<=',$end)->where('end','>=',$start);
+        })->where('available', 1)->where('id', $room)->get()->count();
 
-        return (new Response([], 200))->header('Access-Control-Allow-Origin', '*');
+        $freeRoom = Room::where('id', $room)->has('booking')->get()->count();
+
+        if ((($rooms==0) or ($freeRoom=0)) and (($start->getTimestamp()>=$now->getTimestamp()) and ($end->getTimestamp()>=$now->getTimestamp()))){
+            $bookingManager = app(BookingManager::class);
+            $bookingManager->create($request->all(), $customer, $room, $count, $reqServices);
+
+            return (new Response([], 200))->header('Access-Control-Allow-Origin', '*');
+        } else {
+            return (new Response(['Номер занят в эти даты'], 200))->header('Access-Control-Allow-Origin', '*');
+        }
     }
 
     public function checkSum(Request $request, $room){
@@ -85,15 +96,20 @@ class RoomsController extends Controller
         $count = $count*$dif;
 
         $allServices = Service::all();
+
+        $serSum = 0;
         foreach ($allServices as $allService){
             foreach ($reqServices as $reqService){
                 if ($allService->id = $reqService['id']){
-                    $count = $count + $allService->price;
+                    $serSum = $serSum + $allService->price;
                 }
             }
         }
+        $count = $count+$serSum;
 
-        return (new Response([$count, $dif], 200))->header('Access-Control-Allow-Origin', '*');
+        $myservices = Service::where('id', $reqServices)->get();
+
+        return (new Response([$count, $dif, $myservices], 200))->header('Access-Control-Allow-Origin', '*');
     }
 
     public function bookingGet(RoomRequest $request, $room){

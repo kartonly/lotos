@@ -30,7 +30,12 @@ class BookingsController extends Controller
     public function disabled($booking){
         $this->can('update');
         $item = Booking::where('id', $booking)->get();
-        $item->avialable = 0;
+        if ($item->avialable == 0){
+            $item->avialable = 1;
+        } else {
+            $item->avialable = 0;
+        }
+
 
         return $item;
     }

@@ -34,11 +34,12 @@ class UsersController extends Controller
     public function myBookings(Request $request)
     {
         $now = Carbon::now()->toDateString();
-        $id=Auth::user()->id;
+        $user = $request->user();
+        $id=$user->id;
 
         $bookings = Booking::where('user_id', $id)->where('end','>=',$now)->with('services')->get();
 
-        return (new Response(new BookingResource($bookings), 200))->header('Access-Control-Allow-Origin', '*');
+        return (new Response(BookingResource::collection($bookings)->toArray($bookings), 200))->header('Access-Control-Allow-Origin', '*');
     }
 
     public function myBookingsDelete($booking)
@@ -49,7 +50,8 @@ class UsersController extends Controller
         $now = Carbon::now()->toDateString();
         $id=Auth::user()->id;
         $bookings = Booking::where('user_id', $id)->where('end','>=',$now)->with('services')->get();
-        return $bookings;
+
+        return (new Response(BookingResource::collection($bookings)->toArray($bookings), 200))->header('Access-Control-Allow-Origin', '*');
     }
 
     public function update(Request $request, User $user)

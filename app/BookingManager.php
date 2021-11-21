@@ -27,15 +27,15 @@ class BookingManager
         $this->booking->room_id = $room;
 
         $allServices = Service::all();
+        $serSum = 0;
         foreach ($allServices as $allService){
             foreach ($reqServices as $reqService){
                 if ($allService->id = $reqService['id']){
-                    $count = $count + $allService->price;
+                    $serSum = $serSum + $allService->price;
                 }
             }
         }
-
-
+        $count=$count+$serSum;
 
         $this->booking->summ = $count;
         $this->booking->start = $data["start"];

@@ -36,7 +36,11 @@ class RoomsController extends Controller
         $this->can('update');
 
         $item = Room::where('id', $room)->get();
-        $item->avialable = 0;
+        if ($item->avialable == 0){
+            $item->avialable = 1;
+        } else {
+            $item->avialable = 0;
+        }
 
         return new RoomResource($item);
     }
