@@ -29,12 +29,12 @@ class BookingsController extends Controller
 
     public function disabled($booking){
 
-        $item = Booking::where('id', $booking)->get();
-        if ($item->avialable == 0){
-            $item->avialable = 1;
+        $item = Booking::where('id', $booking)->first();
+        if ($item->available == 0){
+            $item->available = 1;
             $item->save();
         } else {
-            $item->avialable = 0;
+            $item->available = 0;
             $item->save();
         }
 

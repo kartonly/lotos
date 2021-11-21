@@ -16,6 +16,7 @@ class RoomResource extends JsonResource
             'about_room' => $this->resource->about_room,
             'price_per_night' => $this->resource->price_per_night,
             'photo' => $this->resource->photo,
+            'available' => $this->resource->available
         ];
     }
 }

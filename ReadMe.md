@@ -1,8 +1,12 @@
-Запускаем:
-
+## Запускаем:
+###Для запуска программы вам понадобится приложение Docker Desktop(https://www.docker.com/products/docker-desktop)
 
 1. make
 2. make exec-php-fpm
 3. php artisan migrate:install
 4. php artisan migrate
-5. php artisan db:seed --class=RolesAndPermissionsSeeder
+   ##Наполняем тестовыми данными
+1. php artisan db:seed --class=RolesAndPermissionsSeeder
+2. php artisan tinker
+3. Room::factory()->count(1)->make()
+4. Booking::factory()->count(1)->make()

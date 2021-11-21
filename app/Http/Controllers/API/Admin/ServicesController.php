@@ -26,7 +26,7 @@ class ServicesController extends Controller
 
     public function disabled($service){
         $item = Service::where('id', $service)->get();
-        $item->avialable = 0;
+        $item->available = 0;
 
         return $item;
     }
