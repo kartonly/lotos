@@ -4,7 +4,7 @@
 1. make
 2. make exec-php-fpm
 3. php artisan migrate:install
-4. php artisan migrate
+4. php artisan migrate <br>
    ##Наполняем тестовыми данными
 1. php artisan db:seed --class=RolesAndPermissionsSeeder
 2. php artisan tinker
